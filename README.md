@@ -1,4 +1,4 @@
-# canban
+# kanban
 
 > A Vue.js project
 
