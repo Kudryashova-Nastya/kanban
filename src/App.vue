@@ -1,60 +1,115 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <h1>Канбан</h1>
+    <div class="create-task">
+      <lable class="create-task__lable">Новая задача</lable>
+      <br>
+      <input class="create-task__input" type="text" v-model="newtask">
+      <button v-on:click="add">Добавить</button>
+    </div>
+    <div class="container">
+      <div class="board todo">
+        <h3>План</h3>
+        <draggable v-bind:list="ToDo">
+          <div class="board__tasks" v-for="task in ToDo" v-bind:key="task.name">
+          {{task.name}}
+          </div>
+        </draggable>
+      </div>
+      <div class="board doing">
+        <h3>В процессе</h3>
+        <draggable v-bind:list="Doing">
+          <div class="board__tasks" v-for="task in Doind" v-bind:key="task.name">
+          {{task.name}}
+          </div>
+        </draggable>
+      </div>
+      <div class="board done">
+        <h3>Готово</h3>
+        <draggable v-bind:list="Done">
+          <div class="board__tasks" v-for="task in Done" v-bind:key="task.name">
+          {{task.name}}
+          </div>
+        </draggable>
+      </div>
+    </div>
+    <!-- <app-edit></app-edit> -->
   </div>
 </template>
 
 <script>
+import Edit from "./Edit.vue";
+import draggable from "vuedraggable";
 export default {
-  name: 'app',
-  data () {
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      newtask: "",
+      ToDo: [
+        { name: "Сделать документацию" },
+        { name: "Придумать дизайн" },
+        { name: "Реализовать работу карточек" },
+        { name: "Реализовать редактирование карточек" }
+      ],
+      Doing: [],
+      Done: []
+    };
+  },
+  methods: {
+    add() {
+      if (this.newtask) {
+        this.ToDo.push({ name: this.newtask });
+        this.newtask = "";
+      }
     }
+  },
+  components: {
+    "app-edit": Edit,
+    draggable
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #293949;
+  margin-top: 30px;
+}
+
+h1 {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 38px;
+  margin-bottom: 30px;
 }
 
-h1, h2 {
-  font-weight: normal;
+.create-task {
+  line-height: 140%;
+  width: 250px;
+  margin: auto;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
+.board {
+  min-height: 300px;
+  max-width: 300px;
 }
 
-a {
-  color: #42b983;
+.todo {
+  background-color: rgb(87, 167, 233);
+}
+
+.doing {
+  background-color: rgb(252, 237, 110);
+}
+
+.done {
+  background-color: rgb(87, 233, 119);
 }
 </style>
