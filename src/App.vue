@@ -7,40 +7,48 @@
       <input class="create-task__input" type="text" v-model="newtask" />
       <button v-on:click="add" class="create-task__button">Добавить</button>
     </div>
+    <nav class="navigation">
+      <a href="#todo" class="navigation__item">План</a>
+      <a href="#doing" class="navigation__item">В процессе</a>
+      <a href="#done" class="navigation__item">Готово</a>
+    </nav>
     <div class="container">
-      <div class="board todo">
-        <h3>План</h3>
-        <draggable class="draggable-area" v-bind:list="ToDo">
-          <div class="board__task" v-for="task in ToDo" v-bind:key="task.name">
-            <h4>Задача № {{task.number}}</h4>
-            {{task.name}}
-          </div>
-        </draggable>
+      <div class="color-fon-todo" id="todo">
+        <div class="board">
+          <h3>План</h3>
+          <draggable class="draggable-area" v-bind:list="ToDo">
+            <div class="board__task" v-for="task in ToDo" v-bind:key="task.name">
+              <h4>Задача № {{task.number}}</h4>
+              {{task.name}}
+            </div>
+          </draggable>
+        </div>
       </div>
-      <div class="board doing">
-        <h3>В процессе</h3>
-        <draggable class="draggable-area" v-bind:list="Doing">
-          <div class="board__task" v-for="task in Doing" v-bind:key="task.name">
-            <h4>Задача № {{task.number}}</h4>
-            {{task.name}}
-          </div>
-        </draggable>
+      <div class="color-fon-doing" id="doing">
+        <div class="board doing">
+          <h3>В процессе</h3>
+          <draggable class="draggable-area" v-bind:list="Doing">
+            <div class="board__task" v-for="task in Doing" v-bind:key="task.name">
+              <h4>Задача № {{task.number}}</h4>
+              {{task.name}}
+            </div>
+          </draggable>
+        </div>
       </div>
-      <div class="board done">
-        <h3>Готово</h3>
-        <draggable class="draggable-area" v-bind:list="Done">
-          <div class="board__task" v-for="task in Done" v-bind:key="task.name">
-            <h4>Задача № {{task.number}}</h4>
-            {{task.name}}
-          </div>
-        </draggable>
+      <div class="color-fon-done" id="done">
+        <div class="board">
+          <h3>Готово</h3>
+          <draggable class="draggable-area" v-bind:list="Done">
+            <div class="board__task" v-for="task in Done" v-bind:key="task.name">
+              <h4>Задача № {{task.number}}</h4>
+              {{task.name}}
+            </div>
+          </draggable>
+        </div>
       </div>
     </div>
     <div class="tema">
-      <button class="tema__button">
-        <!--<img class="tema__ico" src="./assets/moon.png" />-->
-        Тёмная тема
-      </button>
+      <button class="tema__button"><img class="tema__ico" src="./assets/moon.png" /></button>
     </div>
 
     <!-- <app-edit></app-edit> -->
@@ -61,7 +69,10 @@ export default {
         { name: "Реализовать работу карточек", number: 3 },
         { name: "Реализовать редактирование карточек", number: 4 }
       ],
-      Doing: [],
+      Doing: [
+        { name: "Реализовать редактирование карточек", number: 5 },
+        { name: "Реализовать работу карточек", number: 6 }
+      ],
       Done: []
     };
   },
@@ -97,8 +108,9 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 2.3rem;
+  font-size: 2.4rem;
   margin-bottom: 30px;
+  font-weight: 900;
 }
 
 h3 {
@@ -136,38 +148,51 @@ h4 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .board {
   min-height: 350px;
-  width: 310px;
+  width: 315px;
   border-radius: 20px;
-  border: 2px solid #1f2b3649;
+  border: 2px solid #1f2b36;
+  position: relative;
+  right: 12px;
+  bottom: 15px;
+}
+
+.color-fon-todo {
+  background-color: rgba(107, 187, 219, 0.6);
+  border-radius: 20px;
+}
+.color-fon-doing {
+  background-color: rgba(255, 255, 110, 0.6);
+  border-radius: 20px;
+  margin: 0 2.8%;
+}
+
+.color-fon-done {
+  background-color: rgba(116, 255, 123, 0.6);
+  border-radius: 20px;
 }
 
 .draggable-area {
   min-height: 340px;
 }
 
-.todo {
-  background-color: rgba(107, 187, 219, 0.6);
-}
-
-.doing {
-  background-color: rgba(255, 255, 110, 0.6);
-  margin: 0 2%;
-}
-
-.done {
-  background-color: rgba(116, 255, 123, 0.6);
-}
-
 .board__task {
   background: rgb(255, 255, 250);
-  margin: 8px 6px;
+  margin: 12px;
+  margin-left: 16px;
+  margin-right: 10px;
+  border: 2px solid #1f2b36;
   border-radius: 15px;
-  padding: 2.5%;
+  padding: 3%;
+}
+
+.board__task:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.233);
+  transition: 0.3s;
 }
 
 .tema {
@@ -187,10 +212,62 @@ h4 {
 }
 
 .tema__button:hover {
-  background: rgba(95, 223, 255, 0.568);
+  background: rgba(108, 226, 255, 0.568);
 }
 
 .tema__ico {
-  width: 44px;
+  width: 42px;
+}
+
+.navigation {
+  display: none
+}
+
+@media (max-width: 1045px) {
+  .navigation {
+    display: block;
+    width: 280px;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .navigation__item {
+    display: inline-block;
+    background-color:rgba(210, 133, 255, 0.438);
+    border-radius: 15px;
+    padding: 5px 12px;
+    color: #0f161b;
+    text-decoration: none;
+    margin: 0 4px;
+  }
+
+  .navigation__item:hover {
+    background-color:rgba(194, 88, 255, 0.507);
+  }
+  
+  #todo {
+    display:none
+  }
+
+  #todo:target {
+    display:block
+  }
+
+  #doing {
+    display:none
+  }
+
+  #doing:target {
+  display:block
+  }
+
+  #done {
+    display:none
+  }
+
+  #done:target {
+    display:block
+  }
 }
 </style>
