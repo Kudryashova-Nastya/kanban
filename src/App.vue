@@ -16,10 +16,21 @@
       <div class="color-fon-todo" id="todo">
         <div class="board">
           <h3>План</h3>
-          <draggable class="draggable-area" v-bind:list="ToDo">
-            <div class="board__task" v-for="task in ToDo" v-bind:key="task.name">
+          <draggable class="draggable-area" group="tasks" v-bind:list="ToDo">
+            <div class="board__task" v-for="(task,index) in ToDo" v-bind:key="task.name">
               <h4>Задача № {{task.number}}</h4>
               {{task.name}}
+              <div class="board__buttons">
+                <button class="board__button">
+                  <img class="board__img" src="./assets/edit.svg" />
+                </button>
+                <button
+                  v-on:click="next_task_one(index, task.number, task.name)"
+                  class="board__button"
+                >
+                  <img class="board__img" src="./assets/accept.svg" />
+                </button>
+              </div>
             </div>
           </draggable>
         </div>
@@ -27,10 +38,21 @@
       <div class="color-fon-doing" id="doing">
         <div class="board doing">
           <h3>В процессе</h3>
-          <draggable class="draggable-area" v-bind:list="Doing">
-            <div class="board__task" v-for="task in Doing" v-bind:key="task.name">
+          <draggable class="draggable-area" group="tasks" v-bind:list="Doing">
+            <div class="board__task" v-for="(task, index) in Doing" v-bind:key="task.name">
               <h4>Задача № {{task.number}}</h4>
               {{task.name}}
+              <div class="board__buttons">
+                <button class="board__button">
+                  <img class="board__img" src="./assets/edit.svg" />
+                </button>
+                <button
+                  v-on:click="next_task_two(index, task.number, task.name)"
+                  class="board__button"
+                >
+                  <img class="board__img" src="./assets/accept.svg" />
+                </button>
+              </div>
             </div>
           </draggable>
         </div>
@@ -38,17 +60,27 @@
       <div class="color-fon-done" id="done">
         <div class="board">
           <h3>Готово</h3>
-          <draggable class="draggable-area" v-bind:list="Done">
-            <div class="board__task" v-for="task in Done" v-bind:key="task.name">
+          <draggable class="draggable-area" group="tasks" v-bind:list="Done">
+            <div class="board__task" v-for="(task, index) in Done" v-bind:key="task.name">
               <h4>Задача № {{task.number}}</h4>
               {{task.name}}
+              <div class="board__buttons">
+                <button class="board__button">
+                  <img class="board__img" src="./assets/edit.svg" />
+                </button>
+                <button v-on:click="delete_task(index)" class="board__button">
+                  <img class="board__img" src="./assets/close.svg" />
+                </button>
+              </div>
             </div>
           </draggable>
         </div>
       </div>
     </div>
     <div class="tema">
-      <button class="tema__button"><img class="tema__ico" src="./assets/moon.png" /></button>
+      <button class="tema__button">
+        <img class="tema__ico" src="./assets/moon.png" />
+      </button>
     </div>
 
     <!-- <app-edit></app-edit> -->
@@ -62,17 +94,14 @@ export default {
   data() {
     return {
       newtask: "",
-      n: 4,
+      n: 5,
       ToDo: [
         { name: "Сделать документацию", number: 1 },
         { name: "Придумать дизайн", number: 2 },
         { name: "Реализовать работу карточек", number: 3 },
         { name: "Реализовать редактирование карточек", number: 4 }
       ],
-      Doing: [
-        { name: "Реализовать редактирование карточек", number: 5 },
-        { name: "Реализовать работу карточек", number: 6 }
-      ],
+      Doing: [{ name: "Реализовать drag&drop", number: 5 }],
       Done: []
     };
   },
@@ -83,6 +112,17 @@ export default {
         this.ToDo.push({ name: this.newtask, number: this.n });
         this.newtask = "";
       }
+    },
+    delete_task(index) {
+      this.Done.splice(index, 1);
+    },
+    next_task_one(index, num, name) {
+      this.Doing.push({ name: name, number: num });
+      this.ToDo.splice(index, 1);
+    },
+    next_task_two(index, num, name) {
+      this.Done.push({ name: name, number: num });
+      this.Doing.splice(index, 1);
     }
   },
   components: {
@@ -152,7 +192,7 @@ h4 {
 }
 
 .board {
-  min-height: 350px;
+  height: 100%;
   width: 315px;
   border-radius: 20px;
   border: 2px solid #1f2b36;
@@ -181,13 +221,14 @@ h4 {
 }
 
 .board__task {
-  background: rgb(255, 255, 250);
+  background: rgb(255, 255, 254);
   margin: 12px;
   margin-left: 16px;
   margin-right: 10px;
   border: 2px solid #1f2b36;
   border-radius: 15px;
   padding: 3%;
+  padding-bottom: 38px;
 }
 
 .board__task:hover {
@@ -220,7 +261,22 @@ h4 {
 }
 
 .navigation {
-  display: none
+  display: none;
+}
+
+.board__img {
+  height: 30px;
+  vertical-align: middle;
+}
+
+.board__button {
+  background: none;
+  border: none;
+  float: right;
+}
+
+.board__img:hover {
+  height: 31px;
 }
 
 @media (max-width: 1045px) {
@@ -234,7 +290,7 @@ h4 {
 
   .navigation__item {
     display: inline-block;
-    background-color:rgba(210, 133, 255, 0.438);
+    background-color: rgba(210, 133, 255, 0.438);
     border-radius: 15px;
     padding: 5px 12px;
     color: #0f161b;
@@ -243,31 +299,31 @@ h4 {
   }
 
   .navigation__item:hover {
-    background-color:rgba(194, 88, 255, 0.507);
+    background-color: rgba(194, 88, 255, 0.507);
   }
-  
+
   #todo {
-    display:none
+    display: none;
   }
 
   #todo:target {
-    display:block
+    display: block;
   }
 
   #doing {
-    display:none
+    display: none;
   }
 
   #doing:target {
-  display:block
+    display: block;
   }
 
   #done {
-    display:none
+    display: none;
   }
 
   #done:target {
-    display:block
+    display: block;
   }
 }
 </style>
