@@ -15,7 +15,7 @@
     <div class="container">
       <div class="color-fon-todo" id="todo">
         <div class="board">
-          <h3>План</h3>
+          <h3>План ({{ToDo.length}})</h3>
           <draggable class="draggable-area" group="tasks" v-bind:list="ToDo">
             <div class="board__task" v-for="(task,index) in ToDo" v-bind:key="task.name">
               <h4>Задача № {{task.number}}</h4>
@@ -37,17 +37,22 @@
       </div>
       <div class="color-fon-doing" id="doing">
         <div class="board doing">
-          <h3>В процессе</h3>
+          <h3>В процессе ({{Doing.length}})</h3>
           <draggable class="draggable-area" group="tasks" v-bind:list="Doing">
             <div class="board__task" v-for="(task, index) in Doing" v-bind:key="task.name">
               <h4>Задача № {{task.number}}</h4>
               {{task.name}}
+              <br>
+              <b>Дата и время начала: </b>
+              {{task.start_date ? task.start_date : task.start_date = (new Date().toLocaleDateString())+' '+(new Date().getHours())+':'+(new Date().getMinutes())+':'+(new Date().getSeconds())}} <br>
+              <b>Ответственный:</b>
+              {{task.author}}
               <div class="board__buttons">
                 <button class="board__button">
                   <img class="board__img" src="./assets/edit.svg" />
                 </button>
                 <button
-                  v-on:click="next_task_two(index, task.number, task.name)"
+                  v-on:click="next_task_two(index, task.number, task.name, task.start_date)"
                   class="board__button"
                 >
                   <img class="board__img" src="./assets/accept.svg" />
@@ -59,11 +64,16 @@
       </div>
       <div class="color-fon-done" id="done">
         <div class="board">
-          <h3>Готово</h3>
+          <h3>Готово ({{Done.length}})</h3>
           <draggable class="draggable-area" group="tasks" v-bind:list="Done">
             <div class="board__task" v-for="(task, index) in Done" v-bind:key="task.name">
               <h4>Задача № {{task.number}}</h4>
               {{task.name}}
+              <br />
+              <b>Дата и время начала: </b>{{task.start_date}}<br>
+              <b>Затраченное время: </b>{{task.start_date ? new Date().toLocaleDateString() - task.start_date : '0'}}
+              <b>Ответственный:</b>
+              {{task.author}}
               <div class="board__buttons">
                 <button class="board__button">
                   <img class="board__img" src="./assets/edit.svg" />
@@ -95,13 +105,41 @@ export default {
     return {
       newtask: "",
       n: 5,
+      date: 123,
       ToDo: [
-        { name: "Сделать документацию", number: 1 },
-        { name: "Придумать дизайн", number: 2 },
-        { name: "Реализовать работу карточек", number: 3 },
-        { name: "Реализовать редактирование карточек", number: 4 }
+        {
+          name: "Сделать документацию",
+          number: 1,
+          author: "Анастасия",
+          start_date: ""
+        },
+        {
+          name: "Придумать дизайн",
+          number: 2,
+          author: "Анастасия",
+          start_date: ""
+        },
+        {
+          name: "Реализовать работу карточек",
+          number: 3,
+          author: "Анастасия",
+          start_date: ""
+        },
+        {
+          name: "Реализовать редактирование карточек",
+          number: 4,
+          author: "Анастасия",
+          start_date:""
+        }
       ],
-      Doing: [{ name: "Реализовать drag&drop", number: 5 }],
+      Doing: [
+        {
+          name: "Реализовать drag&drop",
+          number: 5,
+          author: "Анастасия",
+          start_date: ""
+        }
+      ],
       Done: []
     };
   },
@@ -109,7 +147,12 @@ export default {
     add() {
       if (this.newtask) {
         this.n = this.n + 1;
-        this.ToDo.push({ name: this.newtask, number: this.n });
+        this.ToDo.push({
+          name: this.newtask,
+          number: this.n,
+          author: "Анастасия",
+          start_date: ""
+        });
         this.newtask = "";
       }
     },
@@ -117,12 +160,31 @@ export default {
       this.Done.splice(index, 1);
     },
     next_task_one(index, num, name) {
-      this.Doing.push({ name: name, number: num });
+      this.Doing.push({
+        name: name,
+        number: num,
+        author: "Анастасия",
+        start_date: ""
+      });
       this.ToDo.splice(index, 1);
     },
-    next_task_two(index, num, name) {
-      this.Done.push({ name: name, number: num });
+    next_task_two(index, num, name, start) {
+      this.Done.push({
+        name: name,
+        number: num,
+        author: "Анастасия",
+        start_date: start
+      });
       this.Doing.splice(index, 1);
+    }
+    
+  },
+  computed: {
+    localDate() {
+      //Vue.set(this.Doing, index, new Date());
+      alert('wow dude');
+      return this.Doing[0].start_date = (new Date()).toString();
+     
     }
   },
   components: {
@@ -137,13 +199,23 @@ export default {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin-top: 30px;
+  margin: 0;
+  width: 100%;
+  min-height: 750px;
+  padding-bottom: 30px;
+  color: #1f2b36;
+  background: rgb(255, 255, 250);
+  background: rgb(0, 14, 22);
+  position: relative;
+}
+
+.dark {
+
 }
 
 body {
-  background: rgb(255, 255, 250);
-  color: #1f2b36;
-  position: relative;
+  margin: 0;
+  padding:0;
 }
 
 h1 {
@@ -151,6 +223,8 @@ h1 {
   font-size: 2.4rem;
   margin-bottom: 30px;
   font-weight: 900;
+  margin-top:0;
+  padding-top:40px;
 }
 
 h3 {
@@ -204,9 +278,10 @@ h4 {
 .color-fon-todo {
   background-color: rgba(107, 187, 219, 0.6);
   border-radius: 20px;
+  min-height:340px;
 }
 .color-fon-doing {
-  background-color: rgba(255, 255, 110, 0.6);
+  background-color: rgba(255, 255, 110, 0.753);
   border-radius: 20px;
   margin: 0 2.8%;
 }
@@ -217,7 +292,7 @@ h4 {
 }
 
 .draggable-area {
-  min-height: 340px;
+  height: 80%;
 }
 
 .board__task {
@@ -229,6 +304,7 @@ h4 {
   border-radius: 15px;
   padding: 3%;
   padding-bottom: 38px;
+  line-height: 130%;
 }
 
 .board__task:hover {
@@ -238,7 +314,7 @@ h4 {
 
 .tema {
   position: absolute;
-  top: 0;
+  top: 30px;
   right: 30px;
 }
 
