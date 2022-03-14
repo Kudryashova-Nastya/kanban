@@ -3,7 +3,7 @@
 ### Стек: Vue.js
 ## Ссылка на [рабочую версию](http://carbikerental.std-953.ist.mospolytech.ru)
 
-![Скриншот канбана](https://drive.google.com/file/d/1dc6FrKIJ1g1Uf9KxBy67HirIJYjz96VZ/view?usp=sharing "Канбан")
+![Скриншот канбана](https://drive.google.com/file/d/1dc6FrKIJ1g1Uf9KxBy67HirIJYjz96VZ/ "Канбан")
 
 
 ## Build Setup
