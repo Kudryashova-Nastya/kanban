@@ -1,7 +1,7 @@
 # Доска заданий (kanban)
 
 ### Стек: Vue.js
-## Ссылка на [рабочую версию](http://carbikerental.std-953.ist.mospolytech.ru)
+## Ссылка на [рабочую версию](http://kanban.std-953.ist.mospolytech.ru/)
 
 ![Скриншот канбана](https://user-images.githubusercontent.com/56070980/158265312-276cb609-2d61-4458-adf8-a9e888e1f1fa.png "Канбан")
 
